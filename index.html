@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LIBRARY - 3D Inspiration Hub</title>
+    <title>LIBRARY - Live Clock & 3D Thought Portal</title>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
     <style>
@@ -17,9 +17,38 @@
             -moz-user-select: none;
         }
 
+        /* Dynamic Theme Variables */
+        :root {
+            --bg-grad: radial-gradient(circle at center, #1a0b2e, #090314, #000000);
+            --primary-glow: #00f2fe;
+            --secondary-glow: #ff007f;
+            --card-bg: rgba(255, 255, 255, 0.06);
+            --border-color: rgba(0, 242, 254, 0.3);
+        }
+
+        /* Theme Styles */
+        body.theme-gold {
+            --bg-grad: radial-gradient(circle at center, #1b281d, #09140c, #000000);
+            --primary-glow: #ffd700;
+            --secondary-glow: #10b981;
+            --border-color: rgba(255, 215, 0, 0.4);
+        }
+        body.theme-sunset {
+            --bg-grad: radial-gradient(circle at center, #2e0b17, #140308, #000000);
+            --primary-glow: #ff7e5f;
+            --secondary-glow: #feb47b;
+            --border-color: rgba(255, 126, 95, 0.4);
+        }
+        body.theme-ocean {
+            --bg-grad: radial-gradient(circle at center, #0b1a2e, #030a14, #000000);
+            --primary-glow: #38bdf8;
+            --secondary-glow: #818cf8;
+            --border-color: rgba(56, 189, 248, 0.4);
+        }
+
         body {
             font-family: 'Outfit', 'Tiro Devanagari Hindi', sans-serif;
-            background: radial-gradient(circle at center, #1a0b2e, #090314, #000000);
+            background: var(--bg-grad);
             color: #ffffff;
             min-height: 100vh;
             padding: 20px;
@@ -27,42 +56,82 @@
             flex-direction: column;
             align-items: center;
             overflow-x: hidden;
-        }
-
-        /* Animated Background Elements */
-        .bg-glow {
-            position: fixed;
-            width: 350px;
-            height: 350px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #ff007f, #7928ca);
-            filter: blur(120px);
-            opacity: 0.4;
-            z-index: -1;
-            animation: floatGlow 8s infinite alternate ease-in-out;
-        }
-
-        @keyframes floatGlow {
-            0% { transform: translate(-100px, -100px) scale(1); }
-            100% { transform: translate(100px, 100px) scale(1.2); }
+            transition: background 0.8s ease;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             width: 100%;
-            max-width: 850px;
+            max-width: 900px;
         }
 
         .header h1 {
-            font-size: 3rem;
+            font-size: 3.2rem;
             font-weight: 800;
-            background: linear-gradient(90deg, #00f2fe, #4facfe, #00f2fe);
+            background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: 4px;
-            margin-bottom: 15px;
+            margin-bottom: 5px;
             text-transform: uppercase;
+        }
+
+        /* Live Date, Day & Time Widget */
+        .live-datetime-bar {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            padding: 10px 25px;
+            border-radius: 50px;
+            margin-bottom: 15px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        .live-item {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .live-time {
+            color: var(--primary-glow);
+            font-weight: 800;
+            font-family: monospace;
+            font-size: 1.1rem;
+        }
+
+        /* Theme Selector Bar */
+        .theme-bar {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .theme-btn {
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .theme-btn:hover {
+            background: var(--primary-glow);
+            color: #000;
         }
 
         /* Controls Area */
@@ -71,20 +140,18 @@
             gap: 12px;
             flex-wrap: wrap;
             width: 100%;
-            max-width: 850px;
+            max-width: 900px;
             margin-bottom: 25px;
         }
 
-        .search-box {
-            flex: 2;
-            min-width: 250px;
-        }
+        .search-box { flex: 2; min-width: 240px; }
+        .day-picker { flex: 1; min-width: 150px; }
 
         .search-box input, .day-picker input {
             width: 100%;
             padding: 14px 20px;
             border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid var(--border-color);
             background: rgba(255, 255, 255, 0.08);
             color: #fff;
             font-size: 0.95rem;
@@ -93,22 +160,24 @@
             transition: all 0.3s ease;
         }
 
-        .search-box input:focus, .day-picker input:focus {
-            border-color: #00f2fe;
-            box-shadow: 0 0 20px rgba(0, 242, 254, 0.4);
-            background: rgba(255, 255, 255, 0.15);
+        .btn-list {
+            padding: 14px 22px;
+            border-radius: 30px;
+            border: none;
+            background: linear-gradient(45deg, var(--primary-glow), var(--secondary-glow));
+            color: #000;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s;
         }
 
-        .day-picker {
-            flex: 1;
-            min-width: 160px;
-        }
+        .btn-list:hover { transform: scale(1.05); }
 
-        /* 3D Rotating Scene */
+        /* 3D Auto-Rotating Card Section */
         .scene {
-            perspective: 1000px;
+            perspective: 1200px;
             width: 100%;
-            max-width: 850px;
+            max-width: 900px;
             display: flex;
             justify-content: center;
             margin-bottom: 30px;
@@ -116,24 +185,23 @@
 
         .card-3d {
             width: 100%;
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--card-bg);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid var(--border-color);
             border-radius: 28px;
             overflow: hidden;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
             transform-style: preserve-3d;
             transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Rotation Animation Effect */
-        .card-3d.rotate-effect {
-            transform: rotateY(360deg) scale(0.95);
+        .card-3d.rotate-spin {
+            transform: rotateY(360deg) scale(0.96);
         }
 
         .image-box {
             position: relative;
-            height: 320px;
+            height: 280px;
             overflow: hidden;
         }
 
@@ -154,72 +222,110 @@
         }
 
         .badge {
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.75);
             backdrop-filter: blur(8px);
             padding: 6px 16px;
             border-radius: 20px;
             font-size: 0.85rem;
-            color: #00f2fe;
-            border: 1px solid rgba(0, 242, 254, 0.3);
+            color: var(--primary-glow);
+            border: 1px solid var(--border-color);
             font-weight: 600;
         }
 
-        .content-box {
-            padding: 30px;
+        .best-badge {
+            background: #ffd700;
+            color: #000;
+            font-weight: 800;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            box-shadow: 0 0 15px #ffd700;
+            display: none;
         }
 
-        .event-title {
-            color: #ff007f;
+        .content-box { padding: 30px; }
+
+        .thought-counter {
+            color: var(--secondary-glow);
             font-weight: 800;
-            font-size: 0.9rem;
-            letter-spacing: 1.5px;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
             text-transform: uppercase;
-            margin-bottom: 12px;
         }
 
         .thought-text {
-            font-size: 1.35rem;
+            font-size: 1.4rem;
             line-height: 1.8;
             font-family: 'Tiro Devanagari Hindi', serif;
             color: #f8fafc;
             margin-bottom: 20px;
+            min-height: 90px;
         }
 
         .author-name {
-            font-size: 1.2rem;
-            color: #00f2fe;
+            font-size: 1.25rem;
+            color: var(--primary-glow);
             font-weight: 700;
             text-align: right;
         }
 
-        .nav-buttons {
+        /* Modal Popup for 365 Days List */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(15px);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: #0f172a;
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 30px;
+            color: #fff;
+        }
+
+        .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
         }
 
-        .btn {
-            background: linear-gradient(45deg, #7928ca, #ff007f);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
+        .close-btn {
+            font-size: 1.8rem;
             cursor: pointer;
-            font-weight: 600;
-            transition: transform 0.2s;
+            color: var(--secondary-glow);
         }
 
-        .btn:hover {
-            transform: scale(1.05);
+        .day-list-item {
+            padding: 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
         }
 
-        /* Search Results View (English Format) */
+        .day-list-item:hover { background: rgba(255,255,255,0.05); }
+
+        /* Search Results View */
         .search-results {
             width: 100%;
-            max-width: 850px;
+            max-width: 900px;
             display: none;
             flex-direction: column;
             gap: 15px;
@@ -230,78 +336,75 @@
             backdrop-filter: blur(15px);
             padding: 22px;
             border-radius: 20px;
-            border: 1px solid rgba(0, 242, 254, 0.2);
+            border: 1px solid var(--border-color);
         }
 
-        .search-card-author {
-            color: #00f2fe;
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-bottom: 6px;
-        }
-
-        .search-card-thought {
-            color: #e2e8f0;
-            font-size: 1.05rem;
-            line-height: 1.6;
-        }
-
-        .search-card-tag {
-            display: inline-block;
-            margin-top: 10px;
-            font-size: 0.75rem;
-            background: rgba(255, 0, 127, 0.2);
-            color: #ff007f;
-            padding: 4px 10px;
-            border-radius: 10px;
-            font-weight: 600;
-        }
+        .search-card-author { color: var(--primary-glow); font-weight: 700; font-size: 1.15rem; margin-bottom: 6px; }
+        .search-card-thought { color: #e2e8f0; font-size: 1.05rem; line-height: 1.6; }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
-    <div class="bg-glow"></div>
-
     <div class="header">
         <h1>📚 LIBRARY</h1>
-        <p style="color: #a1a1aa; font-size: 0.95rem;">365 Days Knowledge & Thought Portal</p>
+    </div>
+
+    <!-- Live Date, Day & Time Display Bar -->
+    <div class="live-datetime-bar">
+        <div class="live-item" id="liveDayDate">📅 Loading Day & Date...</div>
+        <div class="live-item">⏱️ Time: <span class="live-time" id="liveClock">00:00:00 AM</span></div>
+    </div>
+
+    <!-- Theme Selection Buttons -->
+    <div class="theme-bar">
+        <button class="theme-btn" onclick="setTheme('default')">🔮 Cyber Neon</button>
+        <button class="theme-btn" onclick="setTheme('gold')">👑 Gold Emerald</button>
+        <button class="theme-btn" onclick="setTheme('sunset')">🌅 Sunset Fire</button>
+        <button class="theme-btn" onclick="setTheme('ocean')">🌊 Ocean Blue</button>
     </div>
 
     <!-- Controls Area -->
     <div class="controls-container">
         <div class="search-box">
-            <input type="text" id="searchInput" onkeyup="searchByLeader()" placeholder="🔍 Search Leader Name (e.g. Kalam, Vivekananda, Chanakya)...">
+            <input type="text" id="searchInput" onkeyup="searchByLeader()" placeholder="🔍 Search Leader (Kalam, Vivekananda, Chanakya, Buddha, Gandhi)...">
         </div>
         <div class="day-picker">
-            <input type="number" id="dayInput" min="1" max="365" onchange="jumpToDay()" placeholder="📅 Jump to Day (1-365)">
+            <input type="number" id="dayInput" min="1" max="365" onchange="jumpToDay()" placeholder="📅 Day (1-365)">
         </div>
+        <button class="btn-list" onclick="openModal()">📋 365 Days List</button>
     </div>
 
-    <!-- 3D Main Display -->
+    <!-- 3D Rotating Main Display -->
     <div class="scene" id="mainScene">
         <div class="card-3d" id="card3D">
             <div class="image-box">
                 <img id="thoughtImg" src="" alt="Thought Graphic">
                 <div class="badge-bar">
-                    <div class="badge" id="todayDate">Date Loading...</div>
                     <div class="badge" id="dayBadge">Day 1 / 365</div>
+                    <div class="best-badge" id="bestBadge">⭐ BEST THOUGHT OF THE DAY</div>
                 </div>
             </div>
             <div class="content-box">
-                <div class="event-title" id="eventTitle">📌 EVENT HIGHLIGHT</div>
+                <div class="thought-counter" id="thoughtCounter">ROTATING THOUGHT 1 OF 4</div>
                 <div class="thought-text" id="thoughtText">Loading thought...</div>
                 <div class="author-name" id="thoughtAuthor">Author Name</div>
-
-                <div class="nav-buttons">
-                    <button class="btn" onclick="navigateDay(-1)">❮ Previous Day</button>
-                    <button class="btn" onclick="navigateDay(1)">Next Day ❯</button>
-                </div>
             </div>
         </div>
     </div>
 
-    <!-- English Search Results View -->
+    <!-- Search Results View -->
     <div class="search-results" id="searchResults"></div>
+
+    <!-- 365 Days Directory Modal -->
+    <div class="modal" id="listModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📋 365-Day Thought Calendar</h2>
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+            </div>
+            <div id="modalListContainer"></div>
+        </div>
+    </div>
 
     <script>
         // Disable F12, Ctrl+U, Inspect Element
@@ -313,89 +416,125 @@
             }
         };
 
-        // 365-Day Database with English & Hindi support
+        // Live Clock, Day & Date Update Function
+        function updateLiveDateTime() {
+            const now = new Date();
+            
+            // Format Day and Date (e.g., Thursday, 17 September 2026)
+            const optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDayDate = now.toLocaleDateString('en-US', optionsDate);
+            
+            // Format Live Time (e.g., 03:45:12 PM)
+            const formattedTime = now.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit', 
+                hour12: true 
+            });
+
+            document.getElementById('liveDayDate').innerText = "📅 " + formattedDayDate;
+            document.getElementById('liveClock').innerText = formattedTime;
+        }
+
+        setInterval(updateLiveDateTime, 1000);
+        updateLiveDateTime();
+
+        // Theme Switcher
+        function setTheme(theme) {
+            document.body.className = '';
+            if (theme !== 'default') {
+                document.body.classList.add('theme-' + theme);
+            }
+        }
+
+        // Database
         const database = [
             {
                 day: 1,
-                author: "Dr. A.P.J. Abdul Kalam",
-                event: "VISION & HARDWORK",
-                thoughtHindi: "सफलता केवल एक रात में नहीं मिलती, इसके पीछे वर्षों की निरंतर मेहनत, अनुशासन और असफलता से सीखने का अटूट प्रयास होता है।",
-                thoughtEnglish: "Dream is not that which you see while sleeping, it is something that does not let you sleep. Success comes with relentless consistency.",
-                image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&auto=format&fit=crop&q=80"
+                themeName: "Vision & Leadership",
+                image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=800&auto=format&fit=crop&q=80",
+                thoughts: [
+                    { hindi: "सफलता केवल एक रात में नहीं मिलती, इसके पीछे वर्षों की निरंतर मेहनत और अनुशासन होता है।", english: "Success comes with relentless consistency and hard work.", author: "Dr. A.P.J. Abdul Kalam", isBest: false },
+                    { hindi: "सपने वो नहीं जो आप सोते समय देखते हैं, सपने वो हैं जो आपको सोने नहीं देते।", english: "Dream is not that which you see while sleeping, it is something that does not let you sleep.", author: "Dr. A.P.J. Abdul Kalam", isBest: true },
+                    { hindi: "उठो, जागो और तब तक मत रुको जब तक लक्ष्य की प्राप्ति न हो जाये।", english: "Arise, awake, and stop not till the goal is reached.", author: "Swami Vivekananda", isBest: false },
+                    { hindi: "शिक्षा दुनिया का सबसे शक्तिशाली हथियार है जिससे आप दुनिया बदल सकते हैं।", english: "Education is the most powerful weapon to change the world.", author: "Nelson Mandela", isBest: false }
+                ]
             },
             {
                 day: 2,
-                author: "Swami Vivekananda",
-                event: "YOUTH & WILLPOWER",
-                thoughtHindi: "उठो, जागो और तब तक मत रुको जब तक कि तुम अपने लक्ष्य को प्राप्त न कर लो। कठिनाइयां तुम्हें मजबूत बनाने आती हैं।",
-                thoughtEnglish: "Arise, awake, and stop not till the goal is reached. All power is within you; you can do anything and everything.",
-                image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&auto=format&fit=crop&q=80"
+                themeName: "Courage & Wisdom",
+                image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&auto=format&fit=crop&q=80",
+                thoughts: [
+                    { hindi: "खुद को खोजने का सबसे अच्छा तरीका है खुद को दूसरों की सेवा में लगा देना।", english: "The best way to find yourself is to lose yourself in the service of others.", author: "Mahatma Gandhi", isBest: true },
+                    { hindi: "जो व्यक्ति समय की कद्र करता है, समय उसकी कद्र करता है।", english: "A person who values time is always valued by time.", author: "Chanakya", isBest: false },
+                    { hindi: "शांति की शुरुआत एक मुस्कान से होती है।", english: "Peace begins with a smile.", author: "Mother Teresa", isBest: false },
+                    { hindi: "मनुष्य अपने विचारों से निर्मित प्राणी है, जैसा सोचता है वैसा ही बनता है।", english: "A man is but the product of his thoughts. What he thinks, he becomes.", author: "Mahatma Gandhi", isBest: false }
+                ]
             },
             {
                 day: 3,
-                author: "Nelson Mandela",
-                event: "POWER OF EDUCATION",
-                thoughtHindi: "शिक्षा दुनिया का सबसे शक्तिशाली हथियार है जिसका उपयोग आप पूरी दुनिया को बदलने के लिए कर सकते हैं।",
-                thoughtEnglish: "Education is the most powerful weapon which you can use to change the world.",
-                image: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=800&auto=format&fit=crop&q=80"
-            },
-            {
-                day: 4,
-                author: "Chanakya",
-                event: "WISDOM & TIME",
-                thoughtHindi: "जो व्यक्ति समय का सही उपयोग करना सीख जाता है, वह सफलता की आधी सीढ़ी पहले ही चढ़ चुका होता है।",
-                thoughtEnglish: "A person who learns the true value of time has already achieved half of their success.",
-                image: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=800&auto=format&fit=crop&q=80"
+                themeName: "Focus & Inner Strength",
+                image: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=800&auto=format&fit=crop&q=80",
+                thoughts: [
+                    { hindi: "हम जो सोचते हैं, हम वही बन जाते हैं। सब कुछ हमारे विचारों से उत्पन्न होता है।", english: "What we think, we become. All that we are arises with our thoughts.", author: "Gautam Buddha", isBest: true },
+                    { hindi: "जिंदगी में असफलता से मत डरो, प्रयास न करने से डरो।", english: "Do not fear failure in life, fear not trying.", author: "Bhagat Singh", isBest: false },
+                    { hindi: "ज्ञान में निवेश करने पर सबसे ज्यादा ब्याज मिलता है।", english: "An investment in knowledge pays the best interest.", author: "Benjamin Franklin", isBest: false },
+                    { hindi: "आपका समय सीमित है, इसलिए इसे किसी और की जिंदगी जी कर व्यर्थ न करें।", english: "Your time is limited, so don't waste it living someone else's life.", author: "Steve Jobs", isBest: false }
+                ]
             }
         ];
 
         let currentDayIndex = getDayOfYear() - 1;
+        let currentThoughtSubIndex = 0;
+        let rotationTimer = null;
 
         function getDayOfYear() {
             const now = new Date();
             const start = new Date(now.getFullYear(), 0, 0);
             const diff = now - start;
-            const oneDay = 1000 * 60 * 60 * 24;
-            return Math.floor(diff / oneDay);
+            return Math.floor(diff / (1000 * 60 * 60 * 24));
         }
 
-        // Display Selected Day with 3D Rotation Animation
-        function displayDay(index) {
+        function renderRotatingThought() {
+            const dayData = database[currentDayIndex % database.length];
+            const tList = dayData.thoughts;
+            const item = tList[currentThoughtSubIndex % tList.length];
+
             const card = document.getElementById('card3D');
-            card.classList.add('rotate-effect');
+            card.classList.add('rotate-spin');
 
             setTimeout(() => {
-                const dataIndex = ((index % database.length) + database.length) % database.length;
-                const currentData = database[dataIndex];
+                document.getElementById('thoughtImg').src = dayData.image;
+                document.getElementById('dayBadge').innerText = "Day " + (currentDayIndex + 1) + " / 365";
+                document.getElementById('thoughtCounter').innerText = "ROTATING THOUGHT " + ((currentThoughtSubIndex % tList.length) + 1) + " OF " + tList.length;
+                document.getElementById('thoughtText').innerText = "“" + item.hindi + "”";
+                document.getElementById('thoughtAuthor').innerText = "— " + item.author;
 
-                const now = new Date();
-                const options = { weekday: 'short', month: 'short', day: 'numeric' };
-                document.getElementById('todayDate').innerText = now.toLocaleDateString('en-US', options);
+                const bestBadge = document.getElementById('bestBadge');
+                bestBadge.style.display = item.isBest ? 'inline-block' : 'none';
 
-                document.getElementById('thoughtImg').src = currentData.image;
-                document.getElementById('dayBadge').innerText = "Day " + (dataIndex + 1) + " / 365";
-                document.getElementById('eventTitle').innerText = "📌 " + currentData.event;
-                document.getElementById('thoughtText').innerText = "“" + currentData.thoughtHindi + "”";
-                document.getElementById('thoughtAuthor').innerText = "— " + currentData.author;
-
-                card.classList.remove('rotate-effect');
+                card.classList.remove('rotate-spin');
             }, 400);
         }
 
-        function navigateDay(direction) {
-            currentDayIndex += direction;
-            displayDay(currentDayIndex);
+        function startAutoRotation() {
+            if (rotationTimer) clearInterval(rotationTimer);
+            rotationTimer = setInterval(() => {
+                const dayData = database[currentDayIndex % database.length];
+                currentThoughtSubIndex = (currentThoughtSubIndex + 1) % dayData.thoughts.length;
+                renderRotatingThought();
+            }, 4500);
         }
 
         function jumpToDay() {
             const val = parseInt(document.getElementById('dayInput').value);
             if (val >= 1 && val <= 365) {
                 currentDayIndex = val - 1;
-                displayDay(currentDayIndex);
+                currentThoughtSubIndex = 0;
+                renderRotatingThought();
             }
         }
 
-        // Live Search in English for Great Personalities
         function searchByLeader() {
             const query = document.getElementById('searchInput').value.toLowerCase().trim();
             const mainScene = document.getElementById('mainScene');
@@ -411,34 +550,70 @@
             resultsBox.style.display = "flex";
             resultsBox.innerHTML = "";
 
-            const matches = database.filter(item => 
-                item.author.toLowerCase().includes(query) || 
-                item.event.toLowerCase().includes(query) ||
-                item.thoughtEnglish.toLowerCase().includes(query)
-            );
+            let matches = [];
+            database.forEach(dayObj => {
+                dayObj.thoughts.forEach(t => {
+                    if (t.author.toLowerCase().includes(query) || t.english.toLowerCase().includes(query)) {
+                        matches.push({ ...t, day: dayObj.day });
+                    }
+                });
+            });
 
             if (matches.length === 0) {
                 resultsBox.innerHTML = `
                     <div class="search-card" style="text-align: center;">
-                        <div class="search-card-author">No Results Found</div>
-                        <div class="search-card-thought">Try searching for other names like Kalam, Vivekananda, Mandela, or Chanakya.</div>
+                        <div class="search-card-author">No Quotes Found</div>
+                        <div class="search-card-thought">Try searching for Kalam, Gandhi, Buddha, Chanakya, or Vivekananda.</div>
                     </div>`;
             } else {
                 matches.forEach(item => {
                     const card = document.createElement('div');
                     card.className = 'search-card';
                     card.innerHTML = `
-                        <div class="search-card-author">👤 ${item.author}</div>
-                        <div class="search-card-thought">"${item.thoughtEnglish}"</div>
-                        <div style="margin-top:8px; font-size:0.9rem; color:#a1a1aa;">Hindi Translation: "${item.thoughtHindi}"</div>
-                        <div class="search-card-tag">Day ${item.day} • ${item.event}</div>
+                        <div class="search-card-author">👤 ${item.author} ${item.isBest ? '⭐ (Best Quote)' : ''}</div>
+                        <div class="search-card-thought">"${item.english}"</div>
+                        <div style="margin-top:8px; font-size:0.9rem; color:#a1a1aa;">Hindi: "${item.hindi}"</div>
+                        <div style="margin-top:6px; font-size:0.75rem; color:#00f2fe;">Day ${item.day} Collection</div>
                     `;
                     resultsBox.appendChild(card);
                 });
             }
         }
 
-        displayDay(currentDayIndex);
+        function openModal() {
+            const container = document.getElementById('modalListContainer');
+            container.innerHTML = "";
+
+            for (let i = 1; i <= 365; i++) {
+                const dayData = database[(i - 1) % database.length];
+                const bestThought = dayData.thoughts.find(t => t.isBest) || dayData.thoughts[0];
+
+                const div = document.createElement('div');
+                div.className = 'day-list-item';
+                div.onclick = () => {
+                    currentDayIndex = i - 1;
+                    currentThoughtSubIndex = 0;
+                    renderRotatingThought();
+                    closeModal();
+                };
+                div.innerHTML = `
+                    <div>
+                        <strong>Day ${i}: ${dayData.themeName}</strong>
+                        <div style="font-size:0.85rem; color:#94a3b8; margin-top:3px;">"${bestThought.hindi}"</div>
+                    </div>
+                    <span style="color:#00f2fe; font-size:0.85rem;">View ➔</span>
+                `;
+                container.appendChild(div);
+            }
+            document.getElementById('listModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('listModal').style.display = 'none';
+        }
+
+        renderRotatingThought();
+        startAutoRotation();
     </script>
 </body>
 </html>
