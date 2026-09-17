@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMU Community Library - Aaj Ka Vichar</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet">
+    <style>
+        /* Anti-Copy Protection */
+        * {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', 'Tiro Devanagari Hindi', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            padding: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 40px 30px;
+            max-width: 650px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+
+        .badge {
+            background: #ffc107;
+            color: #000;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 6px 16px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .library-title {
+            font-size: 1.2rem;
+            color: #00d2ff;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .date-display {
+            font-size: 0.95rem;
+            color: #d1d5db;
+            margin-bottom: 30px;
+        }
+
+        .quote-icon {
+            font-size: 4rem;
+            color: rgba(255, 255, 255, 0.2);
+            line-height: 0;
+            margin-bottom: 20px;
+        }
+
+        .quote-text {
+            font-size: 1.4rem;
+            line-height: 1.8;
+            font-weight: 600;
+            margin-bottom: 25px;
+            font-family: 'Tiro Devanagari Hindi', serif;
+            color: #f8fafc;
+        }
+
+        .quote-author {
+            font-size: 1.05rem;
+            color: #00d2ff;
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        .footer-note {
+            margin-top: 35px;
+            font-size: 0.8rem;
+            color: #9ca3af;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;"> <!-- Disable Right Click -->
+
+    <div class="card">
+        <div class="library-title">🎓 BMU COMMUNITY LIBRARY</div>
+        <div class="badge">Thought of the Day</div>
+        <div class="date-display" id="current-date">Loading date...</div>
+        
+        <div class="quote-icon">“</div>
+        <div class="quote-text" id="quote-display">Loading daily thought...</div>
+        <div class="quote-author" id="author-display"></div>
+
+        <div class="footer-note">
+            © BMU Community Library Initiative | Daily Inspiration
+        </div>
+    </div>
+
+    <script>
+        // Disable Keyboard Shortcuts (Ctrl+U, F12, Inspect Element)
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123 || 
+               (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) ||
+               (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) {
+                return false;
+            }
+        };
+
+        // 365 Days Quotes Array (Sample List - Extensible to 365)
+        const quotesList = [
+            { q: "सफलता का कोई रहस्य नहीं है, यह केवल तैयारी, कड़ी मेहनत और असफलता से सीखने का परिणाम है।", a: "— APJ Abdul Kalam" },
+            { q: "उठो, जागो और तब तक मत रुको जब तक लक्ष्य की प्राप्ति न हो जाये।", a: "— Swami Vivekananda" },
+            { q: "ज्ञान ही वह सबसे शक्तिशाली हथियार है जिससे आप दुनिया बदल सकते हैं।", a: "— Nelson Mandela" },
+            { q: "शिक्षा सबसे अच्छी मित्र है। एक शिक्षित व्यक्ति हर जगह सम्मान पाता है।", a: "— Chanakya" },
+            { q: "भविष्य उनका है जो आज अपने सपनों की तैयारी करते हैं।", a: "— Malcolm X" },
+            { q: "मेहनत इतनी खामोशी से करो कि सफलता शोर मचा दे।", a: "— Anonymous" },
+            { q: "जो समय की कद्र करता है, समय उसकी कद्र करता है।", a: "— Ancient Proverb" }
+        ];
+
+        // Automatic Day of the Year Calculation (1 to 365)
+        function getDayOfYear() {
+            const now = new Date();
+            const start = new Date(now.getFullYear(), 0, 0);
+            const diff = now - start;
+            const oneDay = 1000 * 60 * 60 * 24;
+            return Math.floor(diff / oneDay);
+        }
+
+        // Display Quote Based on Date
+        function loadDailyThought() {
+            const today = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('current-date').innerText = today.toLocaleDateString('hi-IN', options);
+
+            const dayIndex = getDayOfYear();
+            // Loop through quotes array automatically
+            const todayQuote = quotesList[dayIndex % quotesList.length];
+
+            document.getElementById('quote-display').innerText = todayQuote.q;
+            document.getElementById('author-display').innerText = todayQuote.a;
+        }
+
+        loadDailyThought();
+    </script>
+</body>
+</html>
